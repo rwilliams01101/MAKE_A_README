@@ -3,11 +3,10 @@ const util = require("util");
 const fs = require("fs");
 const inquirer = require("inquirer");
 
-const questions = [];
+const writeFileAsync = util.promisify(fs.writeFile);
+const appendFileAsync = util.promisify(fs.appendFile);
 
-function writeToFile(fileName, data) {}
-
-function init() {
+async function init() {
   inquirer
     // take user input for user name
     .prompt([
@@ -19,7 +18,7 @@ function init() {
       {
         type: "input",
         message: "What would you like to name your file?",
-        name: "fileName"
+        name: "title"
       },
       {
         type: "input",
@@ -73,34 +72,36 @@ function init() {
         name: "questions"
       }
     ])
-    .then(function({ username, fileName, description, tableOfContents, installation, usage, contributing, questions, license, tests }) {
-      axios.get(`https://api.github.com/users/${username}`).then(function(res) {
-        // console.log(res.data);
+    .then(function({ username, title, description, tableOfContents, installation, usage, contributing, questions, license, tests }) {
+      
+        axios.get(`https://api.github.com/users/${username}`).then(function(res) {
+
         var avatar = res.data.avatar_url;
-        var email = res.data.email;
+        var email = "rwilliams01101@gmail.com";
 
-        fs.writeFile(
-          "README.md",
-          `![image of ${username}](${avatar})` + "\n",
-          function() {
-            // if(err) {
-            //     return console.log(err);
-            // }
-          }
-        );
-
-        fs.appendFile("README.md", "* " + `Email: [${email}](${email})` + "\n", function() {});
-        fs.appendFile("README.md", "# " + fileName  + "\n", function() {});
-        fs.appendFile("README.md", "* " + description  + "\n", function() {});
-        fs.appendFile("README.md", "* " + tableOfContents  + "\n", function() {});
-        fs.appendFile("README.md", "* " + installation  + "\n", function() {});
-        fs.appendFile("README.md", "* " + usage  + "\n", function() {});
-        fs.appendFile("README.md", "* " + license  + "\n", function() {});
-        fs.appendFile("README.md", "* " + contributing  + "\n", function() {});
-        fs.appendFile("README.md", "* " + tests  + "\n", function() {});
-        fs.appendFile("README.md", "* " + questions  + "\n", function() {});
-        console.log(fileName, description, tableOfContents, installation, usage, license, contributing, tests, questions);
       });
+      
+      writeFileAsync("README.md", `![image of ${username}](${avatar})` + "\n", function () {});
+      appendFileAsync("README.md", "* " + `Email: [${email}](${email})` + "\n", function() {});
+      appendFileAsync("README.md", `## Title` + "\n")
+      appendFileAsync("README.md", "### " + title  + "\n", function() {});
+      appendFileAsync("README.md", `## Description` + "\n")
+      appendFileAsync("README.md", description  + "\n", function() {});
+      appendFileAsync("README.md", `## Table of Contents` + "\n")
+      appendFileAsync("README.md", "* " + tableOfContents  + "\n", function() {});
+      appendFileAsync("README.md", `## Installation` + "\n")
+      appendFileAsync("README.md", installation  + "\n", function() {});
+      appendFileAsync("README.md", `## Usage` + "\n")
+      appendFileAsync("README.md", "* " + usage  + "\n", function() {});
+      appendFileAsync("README.md", `## License` + "\n")
+      appendFileAsync("README.md", `![shields.io](https://camo.githubusercontent.com/5b17d82d9a87c80cdd019bacb35c23f3515d33c3/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f4c6963656e73652d417061636865253230322e302d79656c6c6f77677265656e2e737667)`, function() {});
+      appendFileAsync("README.md", "* " + license  + "\n", function() {});
+      appendFileAsync("README.md", `## Contributing` + "\n")
+      appendFileAsync("README.md", "* " + contributing  + "\n", function() {});
+      appendFileAsync("README.md", `## Tests` + "\n")
+      appendFileAsync("README.md", "* " + tests  + "\n", function() {});
+      appendFileAsync("README.md", `## Questions` + "\n")
+      appendFileAsync("README.md", "* " + questions  + "\n", function() {});
     });
 }
 
