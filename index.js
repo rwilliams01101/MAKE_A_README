@@ -29,10 +29,10 @@ async function init() {
         type: "checkbox",
         message: "Would you like a Table of Contents?",
         choices: [
-            "[Installation](#installation)",
-            "[Usage](#usage)",
-            "[Credits](#credits)",
-            "[License](#license)",
+            "[Installation](#installation) \n",
+            "[Usage](#usage) \n" ,
+            "[Contributing](#contributing) \n",
+            "[License](#license) \n",
         ],
         name:"tableOfContents"
       },
@@ -72,10 +72,9 @@ async function init() {
         name: "questions"
       }
     ])
-    .then(function({ username, title, description, tableOfContents, installation, usage, contributing, questions, license, tests }) {
+    .then(function({ username, title, description, tableOfContents, installation, usage, license, contributing, tests, questions }) {
       
         axios.get(`https://api.github.com/users/${username}`).then(function(res) {
-
         var avatar = res.data.avatar_url;
         var email = "rwilliams01101@gmail.com";
 
